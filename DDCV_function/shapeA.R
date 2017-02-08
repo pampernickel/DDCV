@@ -6,11 +6,18 @@
 #' @param drug2 second drug name
 #' @return standard model input data
 #' @export
+
+# modified for direct data frame pass, rather than a read from file option
 shapeA <- function (inputFile, drug1="Drug1", drug2="Drug2",swap=FALSE) {
   #options(digits=2)
   require(reshape2)
   require(plyr)
-  mydata<-read.csv(file=inputFile,header=TRUE,stringsAsFactors=F,check.names=F)
+  if (length(grep(".csv", inputFile) > 0)){
+    mydata<-read.csv(file=inputFile,header=TRUE,stringsAsFactors=F,check.names=F)
+  } else if (is.data.frame(inputFile)){
+    mydata <- inputFile
+  }
+  
   colnames(mydata)[1]<-drug1
   mydata2<-melt(mydata,id=colnames(mydata)[1],value.name="Signal",variable.name=drug2)
   mydata2[,1]<-as.numeric(as.character(mydata2[,1]))
@@ -40,8 +47,4 @@ shapeA <- function (inputFile, drug1="Drug1", drug2="Drug2",swap=FALSE) {
   
   ##return
   return(mydata3)
-  
-    
 }
-
-
