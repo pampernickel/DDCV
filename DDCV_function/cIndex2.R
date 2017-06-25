@@ -120,7 +120,8 @@ cIndex2 <- function (drMatrix, drug1Base=1, drug2Base=1, IC50base=FALSE,unit1="Î
   newdata$Symbol[newdata$CI<=0.1]<-"+++++"
   lev<-c('-----','----','---','--','-','+/-','+','++','+++','++++','+++++')
   newdata$Symbol<-factor(newdata$Symbol,levels=as.character(lev))
-  
+  newdata$CI[which(newdata$CI > 10)] <- 10 # cap values
+  newdata$CI[which(newdata$CI <= 0.01)] <- 0.01 # cap values
   
   theme_blank_ztw<-theme(panel.background = element_blank())+
     theme(panel.grid.minor=element_blank()) +
